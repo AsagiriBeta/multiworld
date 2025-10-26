@@ -19,7 +19,8 @@ public class PermFabric extends Perm {
         boolean cyber = FabricLoader.getInstance().getModContainer("cyber-permissions").isPresent();
         boolean luck =  FabricLoader.getInstance().getModContainer("fabric-permissions-api-v0").isPresent();
         
-        boolean res = plr.hasPermissionLevel(2);
+        // Relax baseline: allow OP level 1 by default
+        boolean res = plr.hasPermissionLevel(1);
 
         if (cyber) {
             if (CyberHandler.hasPermission(plr, perm)) res = true;

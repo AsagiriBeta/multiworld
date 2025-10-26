@@ -255,23 +255,43 @@ public class MultiworldMod {
         }
 
         // SetSpawn Command
-        if (args[0].equalsIgnoreCase("setspawn") && (ALL || Perm.has(plr, "multiworld.setspawn") )) {
-            return SetspawnCommand.run(mc, plr, args);
+        if (args[0].equalsIgnoreCase("setspawn")) {
+            if (ALL || Perm.has(plr, "multiworld.setspawn")) {
+                return SetspawnCommand.run(mc, plr, args);
+            } else {
+                message(plr, "No permission! Missing permission: multiworld.setspawn");
+                return 1;
+            }
         }
 
         // Spawn Command
-        if (args[0].equalsIgnoreCase("spawn") && (ALL || Perm.has(plr, "multiworld.spawn")) ) {
-            return SpawnCommand.run(mc, plr, args);
+        if (args[0].equalsIgnoreCase("spawn")) {
+            if (ALL || Perm.has(plr, "multiworld.spawn")) {
+                return SpawnCommand.run(mc, plr, args);
+            } else {
+                message(plr, "No permission! Missing permission: multiworld.spawn");
+                return 1;
+            }
         }
         
         // Gamerule Command
-        if (args[0].equalsIgnoreCase("gamerule") && (ALL || Perm.has(plr, "multiworld.gamerule"))) {
-        	return GameruleCommand.run(mc, plr, args);
+        if (args[0].equalsIgnoreCase("gamerule")) {
+            if (ALL || Perm.has(plr, "multiworld.gamerule")) {
+                return GameruleCommand.run(mc, plr, args);
+            } else {
+                message(plr, "No permission! Missing permission: multiworld.gamerule");
+                return 1;
+            }
         }
         
         // Difficulty Command
-        if (args[0].equalsIgnoreCase("difficulty") && (ALL || Perm.has(plr, "multiworld.difficulty"))) {
-        	return DifficultyCommand.run(mc, plr, args);
+        if (args[0].equalsIgnoreCase("difficulty")) {
+            if (ALL || Perm.has(plr, "multiworld.difficulty")) {
+                return DifficultyCommand.run(mc, plr, args);
+            } else {
+                message(plr, "No permission! Missing permission: multiworld.difficulty");
+                return 1;
+            }
         }
 
         // TP Command

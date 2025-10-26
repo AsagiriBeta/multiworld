@@ -66,19 +66,19 @@ dependencies {
 sourceSets {
     main {
         java {
-            srcDir("${rootProject.projectDir}/Multiworld-Common/src/main/java/com")
+            srcDir("${rootProject.projectDir}/Multiworld-Common/src/main/java")
             srcDir("src/main/java")
-			exclude("**/dimapi/*.java")
-			exclude("**/dimapi/*.class")
-			exclude("**/dimapi/mixin/*.java")
-			exclude("**/dimapi/mixin/*.class")
+            exclude("**/dimapi/*.java")
+            exclude("**/dimapi/*.class")
+            exclude("**/dimapi/mixin/*.java")
+            exclude("**/dimapi/mixin/*.class")
         }
         resources {
             srcDir("${rootProject.projectDir}/Multiworld-Common/src/main/resources")
-			exclude("**/dimapi/*.java")
-			exclude("**/dimapi/*.class")
-			exclude("**/dimapi/mixin/*.java")
-			exclude("**/dimapi/mixin/*.class")
+            exclude("**/dimapi/*.java")
+            exclude("**/dimapi/*.class")
+            exclude("**/dimapi/mixin/*.java")
+            exclude("**/dimapi/mixin/*.class")
         }
     }
 }

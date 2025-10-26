@@ -77,7 +77,7 @@ dependencies {
 sourceSets {
     main {
         java {
-            srcDir("${rootProject.projectDir}/Multiworld-Common/src/main/java/com")
+            srcDir("${rootProject.projectDir}/Multiworld-Common/src/main/java")
             srcDir("src/main/java")
 			exclude("**/dimapi/*.java")
 			exclude("**/dimapi/*.class")
