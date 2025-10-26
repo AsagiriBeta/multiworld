@@ -27,6 +27,7 @@ import me.isaiah.multiworld.command.SpawnCommand;
 import me.isaiah.multiworld.command.TpCommand;
 import me.isaiah.multiworld.perm.Perm;
 import me.isaiah.multiworld.portal.Portal;
+import me.isaiah.multiworld.util.Compat;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
@@ -201,7 +202,7 @@ public class MultiworldMod {
         if (null == message) {
             message(plr, "&bMultiworld Mod for Minecraft " + mc.getVersion());
 
-            World world = plr.getWorld();
+            World world = Compat.getWorld(plr);
             Identifier id = world.getRegistryKey().getValue();
             
             message(plr, "Currently in: " + id.toString());
@@ -246,7 +247,7 @@ public class MultiworldMod {
         
         // Debug
         if (args[0].equalsIgnoreCase("debugtick")) {
-        	ServerWorld w = (ServerWorld) plr.getWorld();
+        	ServerWorld w = (ServerWorld) Compat.getWorld(plr);
         	Identifier id = w.getRegistryKey().getValue();
         	message(plr, "World ID: " + id.toString());
         	message(plr, "Players : " + w.getPlayers().size());
@@ -295,7 +296,7 @@ public class MultiworldMod {
 
             message(plr, "&bAll Worlds:");
             
-            World pworld = plr.getWorld();
+            World pworld = Compat.getWorld(plr);
             Identifier pwid = pworld.getRegistryKey().getValue();
             
             mc.getWorlds().forEach(world -> {
@@ -382,4 +383,3 @@ public class MultiworldMod {
 	}
 
 }
-

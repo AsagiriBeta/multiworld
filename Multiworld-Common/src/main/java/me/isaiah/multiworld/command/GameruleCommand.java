@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import me.isaiah.multiworld.MultiworldMod;
 import me.isaiah.multiworld.config.FileConfiguration;
+import me.isaiah.multiworld.util.Compat;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -29,7 +30,7 @@ public class GameruleCommand implements Command {
 	
     @SuppressWarnings("unchecked")
 	public static int run(MinecraftServer mc, ServerPlayerEntity plr, String[] args) {
-        ServerWorld w = (ServerWorld) plr.getWorld();
+        ServerWorld w = (ServerWorld) Compat.getWorld(plr);
 
 		if (keys.isEmpty()) {
 			setup(w);

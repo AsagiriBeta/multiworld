@@ -11,6 +11,7 @@ import me.isaiah.multiworld.InfoSuggest;
 import me.isaiah.multiworld.perm.Perm;
 import me.isaiah.multiworld.portal.Portal;
 import me.isaiah.multiworld.portal.WandEventHandler;
+import me.isaiah.multiworld.util.Compat;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -184,7 +185,7 @@ public class PortalCommand implements Command {
 		BlockPos pos2 = (BlockPos) poss[2];
 		
 		if (null == world) {
-			world = (ServerWorld) plr.getWorld();
+			world = (ServerWorld) Compat.getWorld(plr);
 		}
 		
 		if (null == pos1 || null == pos2) {
@@ -251,7 +252,7 @@ public class PortalCommand implements Command {
     	String arg1 = cmds[2];
     	
     	// Argument 2:
-    	if (cmds.length <= 3 || (cmds.length <= 4 && !input.endsWith(" ")) ) {
+    	if (cmds.length <= 3 || (cmds.length <= 4 && !input.endsWith(" ") ) ) {
     		if (arg1.equalsIgnoreCase("create")) {
     			builder.suggest("myPortalName");
     			return;
@@ -266,7 +267,7 @@ public class PortalCommand implements Command {
     	}
     	
     	// Argument 3:
-    	if (cmds.length <= 4 || (cmds.length <= 5 && !input.endsWith(" ")) ) {
+    	if (cmds.length <= 4 || (cmds.length <= 5 && !input.endsWith(" ") ) ) {
     		if (arg1.equalsIgnoreCase("create")) {
 
     			// Suggest Worlds
@@ -279,14 +280,19 @@ public class PortalCommand implements Command {
     				builder.suggest("p:" + p.getName());
     			}
     			
-    			// Suggest Exact Player Pos
-    			Vec3d pos = plr.getPosition();
-    			ServerWorld w = plr.getWorld();
+    			// Suggest Exact Player Pos (only if the source is a player)
+    			try {
+    				ServerPlayerEntity spe = plr.getPlayer();
+    				if (spe != null) {
+    					Vec3d pos = plr.getPosition();
+    					ServerWorld w = (ServerWorld) me.isaiah.multiworld.util.Compat.getWorld(spe);
 
-    			Identifier id = w.getRegistryKey().getValue();
-    			String loc = round(pos.getX()) + "," + round(pos.getY()) + "," + round(pos.getZ());
-    			builder.suggest("e:" + id + ":" + loc);
-    			
+    					Identifier id = w.getRegistryKey().getValue();
+    					String loc = round(pos.getX()) + "," + round(pos.getY()) + "," + round(pos.getZ());
+    					builder.suggest("e:" + id + ":" + loc);
+    				}
+    			} catch (Exception ignored) {}
+
     			return;
     		}
     		return;

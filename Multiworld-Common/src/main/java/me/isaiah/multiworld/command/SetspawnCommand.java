@@ -7,9 +7,9 @@ import java.io.File;
 import java.io.IOException;
 
 import me.isaiah.multiworld.config.FileConfiguration;
+import me.isaiah.multiworld.util.Compat;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 public class SetspawnCommand implements Command {
 
     public static int run(MinecraftServer mc, ServerPlayerEntity plr, String[] args) {
-        World w = plr.getWorld();
+        World w = Compat.getWorld(plr);
         BlockPos pos = plr.getBlockPos();
         try {
             setSpawn(w, pos);

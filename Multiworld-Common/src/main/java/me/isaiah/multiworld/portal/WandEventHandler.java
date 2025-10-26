@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import static me.isaiah.multiworld.MultiworldMod.message;
+import me.isaiah.multiworld.util.Compat;
 
 public class WandEventHandler {
 	
@@ -66,7 +67,7 @@ public class WandEventHandler {
         positions[index] = pos;
         playerPositions.put(uuid, positions);
         
-        positions[0] = (ServerWorld) player.getWorld();
+        positions[0] = (ServerWorld) Compat.getWorld(player);
 
         message(player, "&9[MultiworldPortals]&a📍&r Position " + index + " set to: " + pos.toShortString());
     }

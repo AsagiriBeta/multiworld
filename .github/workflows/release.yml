@@ -1,0 +1,76 @@
+name: Release Multiworld
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Setup Gradle (cache)
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: wrapper
+
+      - name: Build Common + Fabric targets (NeoForge excluded)
+        run: |
+          ./gradlew -PincludeNeo=false --no-daemon --stacktrace \
+            :Multiworld-Common:build \
+            :Multiworld-Fabric-1.20.1:build \
+            :Multiworld-Fabric-1.20.4:build \
+            :Multiworld-Fabric-1.20.6:build \
+            :Multiworld-Fabric-1.21.1:build \
+            :Multiworld-Fabric-1.21.4:build \
+            :Multiworld-Fabric-1.21.5:build \
+            :Multiworld-Fabric-1.21.9:build \
+            :Multiworld-Fabric-bundle:build \
+            :Multiworld-Forge-1.20.1:build \
+            -x test
+
+      - name: Collect release assets
+        run: |
+          mkdir -p release
+          # Copy jars from root output folder (preferred names)
+          if [ -d output ]; then
+            find output -maxdepth 1 -type f -name '*.jar' -exec cp {} release/ \;
+          fi
+          # Fallback: copy jars from each subproject build/libs
+          find . -path '*/build/libs/*.jar' \
+            -not -name '*-sources.jar' \
+            -not -name '*-javadoc.jar' \
+            -exec cp {} release/ \;
+          echo "Collected assets:" && ls -l release
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            release/*.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
