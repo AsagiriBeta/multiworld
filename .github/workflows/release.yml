@@ -50,16 +50,14 @@ jobs:
       - name: Collect release assets
         run: |
           mkdir -p release
-          # Copy jars from root output folder (preferred names)
           if [ -d output ]; then
             find output -maxdepth 1 -type f -name '*.jar' -exec cp {} release/ \;
           fi
-          # Fallback: copy jars from each subproject build/libs
           find . -path '*/build/libs/*.jar' \
             -not -name '*-sources.jar' \
             -not -name '*-javadoc.jar' \
             -exec cp {} release/ \;
-          echo "Collected assets:" && ls -l release
+          (echo "Release assets for ${{ github.ref_name }}:"; ls -1 release/*.jar | sed 's#^./##') | tee release/index.txt
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -71,6 +69,6 @@ jobs:
           generate_release_notes: true
           files: |
             release/*.jar
+            release/index.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-

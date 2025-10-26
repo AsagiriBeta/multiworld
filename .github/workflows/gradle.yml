@@ -48,12 +48,25 @@ jobs:
           :Multiworld-Fabric-bundle:build \
           :Multiworld-Forge-1.20.1:build \
           -x test
+    - name: Prepare artifact folder with index
+      run: |
+        mkdir -p ci-artifacts
+        # Prefer root output jars
+        if [ -d output ]; then
+          find output -maxdepth 1 -type f -name '*.jar' -exec cp {} ci-artifacts/ \;
+        fi
+        # Also copy per-module libs
+        find . -path '*/build/libs/*.jar' \
+          -not -name '*-sources.jar' \
+          -not -name '*-javadoc.jar' \
+          -exec cp {} ci-artifacts/ \;
+        # Generate index.txt for clarity
+        (echo "Built JARs:"; ls -1 ci-artifacts/*.jar | sed 's#^./##') | tee ci-artifacts/index.txt
     - name: Upload jars (artifact)
       uses: actions/upload-artifact@v4
       with:
-        name: multiworld-jars
+        name: multiworld-jars-${{ github.sha }}
         path: |
-          output/*.jar
-          **/build/libs/*.jar
-        if-no-files-found: warn
-        retention-days: 7
+          ci-artifacts/*
+        if-no-files-found: error
+        retention-days: 14
