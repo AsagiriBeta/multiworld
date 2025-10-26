@@ -109,48 +109,60 @@ public class CreateCommand implements Command {
         Identifier dim = get_dim_id(env);
 
         if (null == dim) {
-        	System.out.println("Null dimenstion ");
-        	dim = Util.OVERWORLD_ID;
+            System.out.println("Null dimenstion ");
+            dim = Util.OVERWORLD_ID;
         }
 
         String arg1 = args[1];
-        if (arg1.indexOf(':') == -1) {
-        	arg1 = "multiworld:" + arg1;
+        // Enforce namespace and sanitize path for minecraft identifier rules
+        String namespace = "multiworld";
+        String path;
+        if (arg1.contains(":")) {
+            String[] sp = arg1.split(":", 2);
+            namespace = Util.sanitizeIdPath(sp[0]);
+            path = Util.sanitizeIdPath(sp[1]);
+        } else {
+            path = Util.sanitizeIdPath(arg1);
+        }
+        Identifier worldId = Identifier.tryParse(namespace + ":" + path);
+        if (worldId == null) {
+            message(plr, "&4Invalid world id! Use only a-z0-9/._- and optional namespace.");
+            return 0;
         }
 
         String customGen = "";
         
         if (args.length > 3) {
-        	for (int i = 3; i < args.length; i++) {
-        		String arg = args[i];
-	        	
-	        	// Check if arg is "-g=GENERATOR"
-	        	Tuple<ChunkGenerator, String> resultA = checkArgForGen(mc, arg);
-	        	if (null != resultA) {
-	        		if (null != resultA.first) {
-	        			gen = resultA.first;
-	        			customGen = resultA.second;
-	        			message(plr, "Using ChunkGenerator: \"" + customGen + "\".");
-	        		} else {
-	        			message(plr, "&4Invalid ChunkGenerator: \"" + resultA.second + "\"");
-	        		}
-	        	}
+            for (int i = 3; i < args.length; i++) {
+                String arg = args[i];
 
-	        	// Check if arg is "-s=SEED"
-	        	Optional<Long> resultB = checkArgForSeed(mc, arg); 
-	        	if (resultB.isPresent()) {
-	        		message(plr, "Using seed \"" + resultB.get() + "\".");
-	        		seed = resultB.get();
-	        	}
-        	}
-        	
+                // Check if arg is "-g=GENERATOR"
+                Tuple<ChunkGenerator, String> resultA = checkArgForGen(mc, arg);
+                if (null != resultA) {
+                    if (null != resultA.first) {
+                        gen = resultA.first;
+                        customGen = resultA.second;
+                        message(plr, "Using ChunkGenerator: \"" + customGen + "\".");
+                    } else {
+                        message(plr, "&4Invalid ChunkGenerator: \"" + resultA.second + "\"");
+                    }
+                }
+
+                // Check if arg is "-s=SEED"
+                Optional<Long> resultB = checkArgForSeed(mc, arg);
+                if (resultB.isPresent()) {
+                    message(plr, "Using seed \"" + resultB.get() + "\".");
+                    seed = resultB.get();
+                }
+            }
+
         }
         
-        ServerWorld world = MultiworldMod.create_world(arg1, dim, gen, Difficulty.NORMAL, seed);
-		make_config(world, args[2], seed, customGen);
+        ServerWorld world = MultiworldMod.create_world(worldId.toString(), dim, gen, Difficulty.NORMAL, seed);
+        make_config(world, env, seed, customGen);
 
-		message(plr, I18n.CREATED_WORLD + args[1]);
-        
+        message(plr, I18n.CREATED_WORLD + worldId.getPath());
+
         return 1;
     }
 

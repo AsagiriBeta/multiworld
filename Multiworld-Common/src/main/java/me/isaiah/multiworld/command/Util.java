@@ -130,4 +130,18 @@ public class Util {
 		
 	}
     
+    /**
+     * Sanitize a friendly name to a valid minecraft identifier path segment.
+     * - lowercase
+     * - replace spaces with underscores
+     * - remove characters outside [a-z0-9/._-]
+     */
+    public static String sanitizeIdPath(String s) {
+        String t = s.trim().toLowerCase(AMERICAN_STANDARD);
+        t = t.replace(' ', '_');
+        // remove invalid characters
+        t = t.replaceAll("[^a-z0-9/._-]", "");
+        if (t.isEmpty()) t = "world";
+        return t;
+    }
 }
