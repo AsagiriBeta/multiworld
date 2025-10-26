@@ -46,7 +46,7 @@ public class PortalCommand implements Command {
 			"&a/mw portal select <name>&r - TODO",
 			"&a/mw portal wand&r - Gives a Portal Creation Wand",
 			"&a/mw portal info <name>&r - Displays information about a portal.",
-			"&a/mw portal remove <name>&r - TODO", // Remove the portal whose name is given.",
+			"&a/mw portal remove <name>&r - TODO", // Remove the portal whose name is given.
 	};
 	
 	/**
@@ -184,7 +184,7 @@ public class PortalCommand implements Command {
 		BlockPos pos2 = (BlockPos) poss[2];
 		
 		if (null == world) {
-			world = (ServerWorld) plr.getEntityWorld();
+			world = (ServerWorld) plr.getWorld();
 		}
 		
 		if (null == pos1 || null == pos2) {

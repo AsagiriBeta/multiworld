@@ -13,7 +13,7 @@ import net.minecraft.world.Difficulty;
 public class DifficultyCommand implements Command {
 
     public static int run(MinecraftServer mc, ServerPlayerEntity plr, String[] args) {
-        ServerWorld w = (ServerWorld) plr.getEntityWorld();
+        ServerWorld w = (ServerWorld) plr.getWorld();
 
 		if (args.length < 2) {
 			MultiworldMod.message(plr, "[&4Multiworld&r] Usage: /mw difficulty <value> [world id]");

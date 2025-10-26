@@ -201,7 +201,7 @@ public class MultiworldMod {
         if (null == message) {
             message(plr, "&bMultiworld Mod for Minecraft " + mc.getVersion());
 
-            World world = plr.getEntityWorld();
+            World world = plr.getWorld();
             Identifier id = world.getRegistryKey().getValue();
             
             message(plr, "Currently in: " + id.toString());
@@ -246,7 +246,7 @@ public class MultiworldMod {
         
         // Debug
         if (args[0].equalsIgnoreCase("debugtick")) {
-        	ServerWorld w = (ServerWorld) plr.getEntityWorld();
+        	ServerWorld w = (ServerWorld) plr.getWorld();
         	Identifier id = w.getRegistryKey().getValue();
         	message(plr, "World ID: " + id.toString());
         	message(plr, "Players : " + w.getPlayers().size());
@@ -295,7 +295,7 @@ public class MultiworldMod {
 
             message(plr, "&bAll Worlds:");
             
-            World pworld = plr.getEntityWorld();
+            World pworld = plr.getWorld();
             Identifier pwid = pworld.getRegistryKey().getValue();
             
             mc.getWorlds().forEach(world -> {
@@ -382,3 +382,4 @@ public class MultiworldMod {
 	}
 
 }
+
